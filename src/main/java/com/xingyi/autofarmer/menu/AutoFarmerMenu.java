@@ -16,9 +16,9 @@ public class AutoFarmerMenu extends AbstractContainerMenu {
 
     public AutoFarmerMenu(int syncId, Inventory playerInv, FriendlyByteBuf extraData) {
         this(syncId, playerInv, new ContainerData() {
-            @Override public int get(int idx) { return 0; }
-            @Override public void set(int idx, int val) {}
-            @Override public int.getCount() { return 1; }
+            public int get(int idx) { return 0; }
+            public void set(int idx, int val) {}
+            public int getCount() { return 1; }
         }, new ItemStack[6]);
     }
 
@@ -81,9 +81,6 @@ public class AutoFarmerMenu extends AbstractContainerMenu {
         return result;
     }
 
-    /**
-     * Minimal Container wrapper for a single slot in the machine's ItemStack[] inventory.
-     */
     private static class SimpleItemContainer implements net.minecraft.world.inventory.Container {
         private final ItemStack[] items;
         private final int index;
@@ -93,25 +90,24 @@ public class AutoFarmerMenu extends AbstractContainerMenu {
             this.index = index;
         }
 
-        @Override public int getContainerSize() { return 1; }
-        @Override public boolean isEmpty() { return items[index].isEmpty(); }
-        @Override public ItemStack getItem(int i) { return items[index]; }
-        @Override public ItemStack removeItem(int i, int count) {
+        public int getContainerSize() { return 1; }
+        public boolean isEmpty() { return items[index].isEmpty(); }
+        public ItemStack getItem(int i) { return items[index]; }
+        public ItemStack removeItem(int i, int count) {
             ItemStack s = items[index];
             if (s.isEmpty()) return ItemStack.EMPTY;
             if (count >= s.getCount()) { items[index] = ItemStack.EMPTY; return s; }
             ItemStack removed = s.split(count);
-            setChanged();
             return removed;
         }
-        @Override public ItemStack removeItemNoCopy(int i) {
+        public ItemStack removeItemNoCopy(int i) {
             ItemStack s = items[index];
             items[index] = ItemStack.EMPTY;
             return s;
         }
-        @Override public void setItem(int i, ItemStack stack) { items[index] = stack; setChanged(); }
-        @Override public void setChanged() {}
-        @Override public boolean stillValid(Player player) { return true; }
-        @Override public void clearContent() { items[index] = ItemStack.EMPTY; }
+        public void setItem(int i, ItemStack stack) { items[index] = stack; }
+        public void setChanged() {}
+        public boolean stillValid(Player player) { return true; }
+        public void clearContent() { items[index] = ItemStack.EMPTY; }
     }
 }
