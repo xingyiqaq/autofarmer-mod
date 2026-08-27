@@ -1,0 +1,15 @@
+{
+  "block.autofarmer.autofarmer_block": "自动种植机",
+  "container.autofarmer.autofarmer_block": "自动种植机",
+
+  "autofarmer.tooltip.title": "自动种植机",
+  "autofarmer.tooltip.desc": "自动种植与收割周围的作物和树木",
+  "autofarmer.tooltip.input": "输入槽(5格): 放入种子/树苗",
+  "autofarmer.tooltip.output": "输出槽: 收集产物",
+  "autofarmer.tooltip.supported": "支持: 小麦/胡萝卜/土豆/甜菜/南瓜/西瓜/甘蔗/仙人掌/竹子/甜浆果",
+  "autofarmer.tooltip.trees": "支持: 橡木/云杉/白桦/丛林/金合欢/深色橡木/红树林/樱花/杜鹃花/紫红/诡异",
+  "autofarmer.tooltip.cocoa": "支持: 可可豆(生长在原木上)",
+  "autofarmer.tooltip.tree_harvest": "树木成熟后自动收割原木并回传树苗",
+  "autofarmer.tooltip.melon_pumpkin": "自动收割相邻的南瓜/西瓜方块",
+  "autofarmer.tooltip.cooldown": "冷却: 2秒/次操作"
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "autofarmer:block/autofarmer_block"
+    }
+  }
+}

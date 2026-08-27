@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "autofarmer:block/autofarmer_top",
+    "down": "autofarmer:block/autofarmer_bottom",
+    "up": "autofarmer:block/autofarmer_top",
+    "north": "autofarmer:block/autofarmer_front",
+    "south": "autofarmer:block/autofarmer_back",
+    "east": "autofarmer:block/autofarmer_side",
+    "west": "autofarmer:block/autofarmer_side"
+  }
+}

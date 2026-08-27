@@ -1,0 +1,16 @@
+# ═══════════════════════════════════════════════════════════════════
+# Autofarmer — Auto Planting & Harvesting Machine
+# ═══════════════════════════════════════════════════════════════════
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+
+[[mods]]
+modId="autofarmer"
+version="1.0.0"
+displayName="Autofarmer"
+description='''
+自动种植机器：将种子/树苗放入机器，自动种植在周围的泥土/草方块上，
+成熟后自动收割到输出格子，收割完自动重新种植。
+'''
+authors="xingyi"
