@@ -1,6 +1,6 @@
 package com.xingyi.autofarmer.menu;
 
-import com.xingyi.autofarmer.registry.ModBlocks;
+import com.xingyi.autofarmer.registry.ModMenus;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -15,17 +15,21 @@ public class AutoFarmerMenu extends AbstractContainerMenu {
     private final ContainerData data;
 
     public AutoFarmerMenu(int syncId, Inventory playerInv, FriendlyByteBuf extraData) {
-        this(syncId, playerInv, new ContainerData() {
+        this(syncId, playerInv, new ItemStack[6]);
+    }
+
+    public AutoFarmerMenu(int syncId, Inventory playerInv, ContainerData data) {
+        this(syncId, playerInv, new ItemStack[6]);
+    }
+
+    public AutoFarmerMenu(int syncId, Inventory playerInv, ItemStack[] items) {
+        super(ModMenus.AUTOFARMER.get(), syncId);
+        this.machineInventory = items;
+        this.data = new ContainerData() {
             public int get(int idx) { return 0; }
             public void set(int idx, int val) {}
             public int getCount() { return 1; }
-        }, new ItemStack[6]);
-    }
-
-    public AutoFarmerMenu(int syncId, Inventory playerInv, ContainerData data, ItemStack[] items) {
-        super(ModBlocks.AUTOFARMER.get(), syncId);
-        this.machineInventory = items;
-        this.data = data;
+        };
 
         int slotsX = 8;
         int slotsY = 34;
@@ -55,7 +59,6 @@ public class AutoFarmerMenu extends AbstractContainerMenu {
         return true;
     }
 
-    @Override
     public ItemStack quickMoveStack(Player player, int slot) {
         ItemStack result = ItemStack.EMPTY;
         Slot slotObj = this.slots.get(slot);
