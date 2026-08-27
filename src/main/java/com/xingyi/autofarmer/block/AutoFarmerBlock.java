@@ -16,11 +16,6 @@ public class AutoFarmerBlock extends BaseEntityBlock {
         super(p);
     }
 
-    @Override
-    protected RenderShape getRenderShape(BlockState state) {
-        return RenderShape.MODEL;
-    }
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
