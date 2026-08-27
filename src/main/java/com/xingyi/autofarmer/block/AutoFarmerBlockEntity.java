@@ -37,6 +37,12 @@ import java.util.*;
 
 public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
 
+    private static Block regLookup(String path) {
+        return ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse(path));
+    }
+
+    private static final Block netherWartsBlock = regLookup("minecraft:nether_warts");
+
     private static final int SLOT_OUTPUT   = 5;
     private static final int TOTAL_SLOTS   = 6;
 
@@ -61,7 +67,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
         CROP_AGE_MAP.put(Blocks.CARROTS,          7);
         CROP_AGE_MAP.put(Blocks.BAMBOO,           15);
         CROP_AGE_MAP.put(Blocks.SUGAR_CANE,       15);
-        CROP_AGE_MAP.put(Blocks.NETHER_WARTS,     3);
+        CROP_AGE_MAP.put(regLookup("minecraft:nether_warts"),     3);
         CROP_AGE_MAP.put(Blocks.CACTUS,           255);
         CROP_AGE_MAP.put(Blocks.MELON_STEM,       7);
         CROP_AGE_MAP.put(Blocks.PUMPKIN_STEM,     7);
@@ -71,7 +77,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     private static final Set<Block> VANILLA_SAPLING_BLOCKS = Set.of(
         Blocks.OAK_SAPLING, Blocks.SPRUCE_SAPLING, Blocks.BIRCH_SAPLING,
         Blocks.JUNGLE_SAPLING, Blocks.ACACIA_SAPLING, Blocks.DARK_OAK_SAPLING,
-        Blocks.MANGROVE_SAPLING, Blocks.CHERRY_SAPLING,
+        regLookup("minecraft:mangrove_sapling"), regLookup("minecraft:cherry_sapling"),
         Blocks.AZALEA, Blocks.FLOWERING_AZALEA,
         Blocks.CRIMSON_FUNGUS, Blocks.WARPED_FUNGUS
     );
@@ -86,8 +92,8 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
         VANILLA_LOG_BLOCKS.add(Blocks.DARK_OAK_LOG);
         VANILLA_LOG_BLOCKS.add(Blocks.MANGROVE_LOG);
         VANILLA_LOG_BLOCKS.add(Blocks.CHERRY_LOG);
-        VANILLA_LOG_BLOCKS.add(Blocks.AZALEA_STEM);
-        VANILLA_LOG_BLOCKS.add(Blocks.FLOWERING_AZALEA_STEM);
+        VANILLA_LOG_BLOCKS.add(regLookup("minecraft:azalea_stem"));
+        VANILLA_LOG_BLOCKS.add(regLookup("minecraft:flowering_azalea_stem"));
         VANILLA_LOG_BLOCKS.add(Blocks.CRIMSON_STEM);
         VANILLA_LOG_BLOCKS.add(Blocks.WARPED_STEM);
         VANILLA_LOG_BLOCKS.add(Blocks.STRIPPED_OAK_LOG);
@@ -98,8 +104,8 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
         VANILLA_LOG_BLOCKS.add(Blocks.STRIPPED_DARK_OAK_LOG);
         VANILLA_LOG_BLOCKS.add(Blocks.STRIPPED_MANGROVE_LOG);
         VANILLA_LOG_BLOCKS.add(Blocks.STRIPPED_CHERRY_LOG);
-        VANILLA_LOG_BLOCKS.add(Blocks.STRIPPED_AZALEA_STEM);
-        VANILLA_LOG_BLOCKS.add(Blocks.STRIPPED_FLOWERING_AZALEA_STEM);
+        VANILLA_LOG_BLOCKS.add(regLookup("minecraft:stripped_azalea_stem"));
+        VANILLA_LOG_BLOCKS.add(regLookup("minecraft:stripped_flowering_azalea_stem"));
         VANILLA_LOG_BLOCKS.add(Blocks.STRIPPED_CRIMSON_STEM);
         VANILLA_LOG_BLOCKS.add(Blocks.STRIPPED_WARPED_STEM);
     }
@@ -118,7 +124,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int syncId, Inventory inv, Player player) {
-        return new AutoFarmerMenu(syncId, inv, data, inventory);
+        return new AutoFarmerMenu(syncId, inv, inventory);
     }
 
     @Override
@@ -431,14 +437,14 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
 
     private ItemStack harvest(Level level, BlockPos pos, BlockState state) {
         if (level.getServer() == null) return ItemStack.EMPTY;
-        LootTable table = level.getServer().getLootTables().get(state.getBlock().getLootTable());
+        LootTable table = level.getServer().getLootTable(state.getBlock().getLootTable());
         if (table == null) return ItemStack.EMPTY;
         LootParams params = new LootParams.Builder((ServerLevel) level)
                 .withParameter(LootContextParams.BLOCK_STATE, state)
                 .withParameter(LootContextParams.BLOCK_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
                 .withLuck(0.0f)
-                .build(null);
+                .build(java.util.Optional.empty());
         List<ItemStack> drops = table.getRandomItems(params);
         if (drops.isEmpty()) return ItemStack.EMPTY;
         ItemStack combined = drops.get(0).copy();
@@ -482,8 +488,8 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
             if (plantBlock == Blocks.BAMBOO) {
                 level.setBlock(pos, Blocks.BAMBOO.defaultBlockState()
                         .setValue(BlockStateProperties.AGE_15, 0), 3);
-            } else if (plantBlock == Blocks.NETHER_WARTS) {
-                level.setBlock(pos, Blocks.NETHER_WARTS.defaultBlockState()
+            } else if (plantBlock == netherWartsBlock) {
+                level.setBlock(pos, netherWartsBlock.defaultBlockState()
                         .setValue(BlockStateProperties.AGE_3, 0), 3);
             } else if (plantBlock == Blocks.SWEET_BERRY_BUSH) {
                 level.setBlock(pos, Blocks.SWEET_BERRY_BUSH.defaultBlockState()
@@ -496,8 +502,8 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
                 lastSaplingX = pos.getX();
                 lastSaplingY = pos.getY();
                 lastSaplingZ = pos.getZ();
-                plantedSaplingItem = s.getItem().getRegistryName() != null
-                        ? s.getItem().getRegistryName().toString() : null;
+                plantedSaplingItem = ForgeRegistries.ITEMS.getKey(s.getItem()) != null
+                        ? ForgeRegistries.ITEMS.getKey(s.getItem()).toString() : null;
             }
 
             return true;
@@ -512,7 +518,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
             return belowBlock == Blocks.FARMLAND || isDirtLike(belowBlock);
         }
 
-        if (plantBlock == Blocks.NETHER_WARTS) {
+        if (plantBlock == netherWartsBlock) {
             return belowBlock == Blocks.SOUL_SAND;
         }
 
@@ -573,7 +579,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     private boolean isSaplingLike(Block block) {
         if (block instanceof SaplingBlock) return true;
         if (VANILLA_SAPLING_BLOCKS.contains(block)) return true;
-        ResourceLocation reg = block.getRegistryName();
+        ResourceLocation reg = ForgeRegistries.BLOCKS.getKey(block);
         if (reg == null) return false;
         String name = reg.getPath().toLowerCase();
         return name.contains("sapling") || name.contains("fungus")
@@ -582,7 +588,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
 
     private boolean isLogLike(Block block) {
         if (VANILLA_LOG_BLOCKS.contains(block)) return true;
-        ResourceLocation reg = block.getRegistryName();
+        ResourceLocation reg = ForgeRegistries.BLOCKS.getKey(block);
         if (reg == null) return false;
         String name = reg.getPath().toLowerCase();
         return name.contains("log") || name.contains("stem")
@@ -590,7 +596,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private boolean isLeafLike(Block block) {
-        ResourceLocation reg = block.getRegistryName();
+        ResourceLocation reg = ForgeRegistries.BLOCKS.getKey(block);
         if (reg == null) return false;
         String name = reg.getPath().toLowerCase();
         return name.contains("leaf") || name.contains("leaves") || name.contains("foliage");
