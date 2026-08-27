@@ -12,7 +12,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -119,7 +118,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int syncId, Inventory inv, Player player) {
-        return new AutoFarmerMenu(syncId, inv, new SimpleContainer(inventory), data);
+        return new AutoFarmerMenu(syncId, inv, data, inventory);
     }
 
     @Override
@@ -282,7 +281,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
         return ItemStack.EMPTY;
     }
 
-    private boolean hasProperty(BlockState s, net.minecraft.world.level.block.state.Property<?> p) {
+    private boolean hasProperty(BlockState s, net.minecraft.world.level.block.state.properties.Property<?> p) {
         return s.hasProperty(p);
     }
 
