@@ -1,7 +1,9 @@
 package com.xingyi.autofarmer.registry;
 
 import com.xingyi.autofarmer.AutoFarmerMod;
+import com.xingyi.autofarmer.menu.AutoFarmerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.SimpleContainer;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -13,6 +15,6 @@ public class ModMenus {
 
     public static final RegistryObject<MenuType<?>> AUTOFARMER =
         MENUS.register("autofarmer", () -> IForgeMenuType.create((windowId, inv, data) -> {
-            return new com.xingyi.autofarmer.menu.AutoFarmerMenu(windowId, inv, data);
+            return new AutoFarmerMenu(windowId, inv, new SimpleContainer(6), data);
         }));
 }
