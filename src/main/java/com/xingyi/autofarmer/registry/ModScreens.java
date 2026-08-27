@@ -1,6 +1,7 @@
 package com.xingyi.autofarmer.registry;
 
 import com.xingyi.autofarmer.AutoFarmerMod;
+import com.xingyi.autofarmer.menu.AutoFarmerMenu;
 import com.xingyi.autofarmer.screen.AutoFarmerScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.api.distmarker.Dist;
@@ -13,6 +14,11 @@ public class ModScreens {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        MenuScreens.register(ModMenus.AUTOFARMER.get(), AutoFarmerScreen::new);
+        event.enqueueWork(() -> {
+            MenuScreens.register(
+                ModMenus.AUTOFARMER.get(),
+                (menu, inv, title) -> new AutoFarmerScreen((AutoFarmerMenu) menu, inv, title)
+            );
+        });
     }
 }
