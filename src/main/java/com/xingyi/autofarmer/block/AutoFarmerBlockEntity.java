@@ -51,7 +51,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     private int lastSaplingX = 0, lastSaplingY = 0, lastSaplingZ = 0;
     private String plantedSaplingItem = null;
 
-    public final net.minecraft.world.SimpleContainer inventory = new net.minecraft.world.SimpleContainer(TOTAL_SLOTS);
+    public final ItemStack[] inventory = new ItemStack[TOTAL_SLOTS];
     private final ContainerData data = new ContainerData() {
         @Override public int get(int idx)  { return cooldown; }
         @Override public void set(int idx, int val) { cooldown = val; }
