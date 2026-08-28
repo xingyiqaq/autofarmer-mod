@@ -125,7 +125,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int syncId, Inventory inv, Player player) {
-        return new AutoFarmerMenu(syncId, inv, new net.minecraft.world.SimpleContainer(6), data);
+        return new AutoFarmerMenu(syncId, inv, inventory);
     }
 
     @Override
@@ -438,14 +438,14 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
 
     private ItemStack harvest(Level level, BlockPos pos, BlockState state) {
         if (level.getServer() == null) return ItemStack.EMPTY;
-        LootTable table = level.getServer().getLootTable(state.getBlock().getLootTable());
+        LootTable table = level.getServer().getLootTableManager().getLootTable(state.getBlock().getLootTable());
         if (table == null) return ItemStack.EMPTY;
         LootParams params = new LootParams.Builder((ServerLevel) level)
                 .withParameter(LootContextParams.BLOCK_STATE, state)
                 .withParameter(LootContextParams.BLOCK_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
                 .withLuck(0.0f)
-                .build(net.minecraft.util.RandomSource.create());
+                .build();
         List<ItemStack> drops = table.getRandomItems(params);
         if (drops.isEmpty()) return ItemStack.EMPTY;
         ItemStack combined = drops.get(0).copy();
