@@ -31,6 +31,9 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.storage.loot.LootContextParam;
+import net.minecraft.world.level.storage.loot.LootContextParamSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
@@ -439,14 +442,31 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     private ItemStack harvest(Level level, BlockPos pos, BlockState state) {
         if (level.getServer() == null) return ItemStack.EMPTY;
         ServerLevel serverLevel = (ServerLevel) level;
-        LootTable table = serverLevel.getLootTable(state.getBlock().getLootTable());
+        var lootRegistry = serverLevel.registryAccess().lookupOrThrow(Registries.LOOT_TABLE);
+        LootTable table = lootRegistry.get(state.getBlock().getLootTable());
         if (table == null) return ItemStack.EMPTY;
+        LootContextParam<?>[] lootParams = {
+            LootContextParams.BLOCK_STATE,
+            LootContextParams.BLOCK_ENTITY,
+            LootContextParams.ORIGIN
+        };
+        LootContextParamSet paramSet = new LootContextParamSet() {
+            public boolean contains(LootContextParam<?> param) {
+                for (LootContextParam<?> p : lootParams) {
+                    if (p == param) return true;
+                }
+                return false;
+            }
+            public java.util.Iterator<LootContextParam<?>> iterator() {
+                return java.util.Arrays.asList(lootParams).iterator();
+            }
+        };
         LootParams params = new LootParams.Builder(serverLevel)
                 .withParameter(LootContextParams.BLOCK_STATE, state)
                 .withParameter(LootContextParams.BLOCK_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
                 .withLuck(0.0f)
-                .create(LootContextParams.BLOCK_LOOT);
+                .create(paramSet);
         List<ItemStack> drops = table.getRandomItems(params);
         if (drops.isEmpty()) return ItemStack.EMPTY;
         ItemStack combined = drops.get(0).copy();
