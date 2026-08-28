@@ -32,10 +32,10 @@ public class AutoFarmerBlock extends BaseEntityBlock {
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof AutoFarmerBlockEntity afbe) {
             int occupied = 0;
-            for (int i = 0; i < afbe.inventory.length; i++) {
-                if (!afbe.inventory[i].isEmpty()) occupied++;
+            for (int i = 0; i < afbe.inventory.getContainerSize(); i++) {
+                if (!afbe.inventory.getItem(i).isEmpty()) occupied++;
             }
-            return Math.round(occupied * 15.0f / afbe.inventory.length);
+            return Math.round(occupied * 15.0f / afbe.inventory.getContainerSize());
         }
         return 0;
     }
