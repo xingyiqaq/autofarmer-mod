@@ -438,14 +438,15 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
 
     private ItemStack harvest(Level level, BlockPos pos, BlockState state) {
         if (level.getServer() == null) return ItemStack.EMPTY;
-        LootTable table = level.getLootTable(state.getBlock().getLootTable());
+        ServerLevel serverLevel = (ServerLevel) level;
+        LootTable table = serverLevel.getLootTable(state.getBlock().getLootTable());
         if (table == null) return ItemStack.EMPTY;
-        LootParams params = new LootParams.Builder((ServerLevel) level)
+        LootParams params = new LootParams.Builder(serverLevel)
                 .withParameter(LootContextParams.BLOCK_STATE, state)
                 .withParameter(LootContextParams.BLOCK_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
                 .withLuck(0.0f)
-                .create();
+                .create(LootContextParams.BLOCK_LOOT);
         List<ItemStack> drops = table.getRandomItems(params);
         if (drops.isEmpty()) return ItemStack.EMPTY;
         ItemStack combined = drops.get(0).copy();
