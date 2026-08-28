@@ -471,7 +471,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
         Block belowBlock = below.getBlock();
 
         for (int i = 0; i < SLOT_OUTPUT; i++) {
-            ItemStack s = inventory.getItem(i);
+            ItemStack s = inventory[i];
             if (s.isEmpty()) continue;
             if (!(s.getItem() instanceof BlockItem blockItem)) continue;
             Block plantBlock = blockItem.getBlock();
@@ -608,19 +608,19 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     // ══════════════════════════════════════════════════════════════════════════
 
     private ItemStack addToOutput(ItemStack toAdd) {
-        if (inventory.getItem(SLOT_OUTPUT).isEmpty()) {
-            inventory.setItem(SLOT_OUTPUT, toAdd.copy())
+        if (inventory[SLOT_OUTPUT].isEmpty()) {
+            inventory[SLOT_OUTPUT] = toAdd.copy()
             return ItemStack.EMPTY;
         }
-        if (!ItemStack.isSameItemSameTags(inventory.getItem(SLOT_OUTPUT), toAdd)) {
+        if (!ItemStack.isSameItemSameTags(inventory[SLOT_OUTPUT], toAdd)) {
             return toAdd;
         }
-        int space = inventory.getItem(SLOT_OUTPUT).getMaxStackSize() - inventory.getItem(SLOT_OUTPUT).getCount();
+        int space = inventory[SLOT_OUTPUT].getMaxStackSize() - inventory[SLOT_OUTPUT].getCount();
         if (space >= toAdd.getCount()) {
-            inventory.getItem(SLOT_OUTPUT).grow(toAdd.getCount());
+            inventory[SLOT_OUTPUT].grow(toAdd.getCount());
             return ItemStack.EMPTY;
         }
-        inventory.getItem(SLOT_OUTPUT).setCount(inventory.getItem(SLOT_OUTPUT).getMaxStackSize());
+        inventory[SLOT_OUTPUT].setCount(inventory[SLOT_OUTPUT].getMaxStackSize());
         ItemStack rem = toAdd.copy();
         rem.shrink(space);
         return rem;
@@ -628,15 +628,15 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
 
     private void addToInput(ItemStack toAdd) {
         for (int i = 0; i < SLOT_OUTPUT; i++) {
-            if (inventory.getItem(i).isEmpty()) {
-                inventory.setItem(i, toAdd.copy())
+            if (inventory[i].isEmpty()) {
+                inventory[i] = toAdd.copy()
                 return;
             }
-            if (ItemStack.isSameItemSameTags(inventory.getItem(i), toAdd)) {
-                int space = inventory.getItem(i).getMaxStackSize() - inventory.getItem(i).getCount();
+            if (ItemStack.isSameItemSameTags(inventory[i], toAdd)) {
+                int space = inventory[i].getMaxStackSize() - inventory[i].getCount();
                 if (space > 0) {
                     int take = Math.min(space, toAdd.getCount());
-                    inventory.getItem(i).grow(take);
+                    inventory[i].grow(take);
                     if (take < toAdd.getCount()) {
                         ItemStack rem = toAdd.copy();
                         rem.shrink(take);
@@ -666,7 +666,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
         // Check if the item was actually added
         boolean added = false;
         for (int i = 0; i < SLOT_OUTPUT; i++) {
-            if (!inventory.getItem(i).isEmpty() && ItemStack.isSameItemSameTags(inventory.getItem(i), toAdd)) {
+            if (!inventory[i].isEmpty() && ItemStack.isSameItemSameTags(inventory[i], toAdd)) {
                 added = true;
                 break;
             }
@@ -688,18 +688,18 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     private void consumeSlot(int slot, int count) {
-        ItemStack s = inventory.getItem(slot);
+        ItemStack s = inventory[slot];
         if (s.isEmpty()) return;
         int rem = s.getCount() - count;
-        if (rem <= 0) inventory.setItem(slot, ItemStack.EMPTY)
+        if (rem <= 0) inventory[slot] = ItemStack.EMPTY
         else s.shrink(count);
     }
 
     private void saveInventory(CompoundTag tag) {
         CompoundTag items = new CompoundTag();
         for (int i = 0; i < TOTAL_SLOTS; i++) {
-            if (!inventory.getItem(i).isEmpty())
-                items.put("s" + i, inventory.getItem(i).save(new CompoundTag()));
+            if (!inventory[i].isEmpty())
+                items.put("s" + i, inventory[i].save(new CompoundTag()));
         }
         tag.put("Items", items);
     }
@@ -708,7 +708,7 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
         CompoundTag items = tag.getCompound("Items");
         for (int i = 0; i < TOTAL_SLOTS; i++) {
             if (items.contains("s" + i))
-                inventory.setItem(i, ItemStack.of(items.getCompound("s" + i)))
+                inventory[i] = ItemStack.of(items.getCompound("s" + i))
         }
     }
 }
