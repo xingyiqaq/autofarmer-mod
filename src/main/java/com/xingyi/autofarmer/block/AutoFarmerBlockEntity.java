@@ -441,59 +441,35 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
 
     private ItemStack harvest(Level level, BlockPos pos, BlockState state) {
         // Simple harvest: return the block item directly
-        net.minecraft.world.item.Item item = net.minecraft.world.item.BlockItem.getItemFor(state.getBlock());
+        net.minecraft.world.item.Item item = state.getBlock().asItem();
         if (item == null) return net.minecraft.world.item.ItemStack.EMPTY;
         // Handle crops specially
-        ItemStack result = getHarvestItem(state);
+        net.minecraft.world.item.ItemStack result = getHarvestItem(state);
         if (result.isEmpty()) return net.minecraft.world.item.ItemStack.EMPTY;
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
         return result;
     }
 
-    private ItemStack getHarvestItem(BlockState state) {
+    private net.minecraft.world.item.ItemStack getHarvestItem(BlockState state) {
         Block block = state.getBlock();
-        if (block == Blocks.WHEAT) return new ItemStack(Items.WHEAT, 1);
-        if (block == Blocks.CARROTS) return new ItemStack(Items.CARROTS, 2);
-        if (block == Blocks.POTATOES) return new ItemStack(Items.POTATOES, 2);
-        if (block == Blocks.BEETROOTS) return new ItemStack(Items.BEETROOT, 1);
-        if (block == Blocks.BEETROOT) return new ItemStack(Items.BEETROOT, 1);
-        if (block == Blocks.SWEET_BERRIES) return new ItemStack(Items.SWEET_BERRIES, 2);
-        if (block == Blocks.BAMBOO) return new ItemStack(Items.BAMBOO, 1);
-        if (block == Blocks.SUGAR_CANE) return new ItemStack(Items.SUGAR_CANE, 1);
-        if (block == Blocks.CACTUS) return new ItemStack(Blocks.CACTUS, 1);
-        if (block == Blocks.COCOA_BLOCK) return new ItemStack(Items.COCOA_BEANS, 2);
-        if (block == Blocks.MELON_STEM || block == Blocks.PUMPKIN_STEM) return ItemStack.EMPTY; // stems handled elsewhere
-        if (block == Blocks.MELON) return new ItemStack(Items.MELON_SLICE, 2);
-        if (block == Blocks.PUMPKIN) return new ItemStack(Blocks.PUMPKIN, 1);
-        if (block == Blocks.NETHER_WART) return new ItemStack(Items.NETHER_WART, 2);
-        if (block == Blocks.CREEPER_HEAD) return new ItemStack(Items.CREEPER_HEAD, 1);
-        if (block == Blocks.SKELETON_SKULL) return new ItemStack(Items.SKELETON_SKULL, 1);
-        if (block == Blocks.ZOMBIE_HEAD) return new ItemStack(Items.ZOMBIE_HEAD, 1);
-        if (block == Blocks.PLAYER_HEAD) return new ItemStack(Items.PLAYER_HEAD, 1);
-        if (block == Blocks.WITHER_SKELETON_SKULL) return new ItemStack(Items.WITHER_SKELETON_SKULL, 1);
-        if (block == Blocks.DRIED_KELP_BLOCK) return new ItemStack(Items.DRIED_KELP, 3);
-        if (block == Blocks.HAY_BLOCK) return new ItemStack(Items.WHEAT, 3);
-        if (block == Blocks.TNT) return new ItemStack(Blocks.TNT, 1);
-        if (block == Blocks.OAK_LOG) return new ItemStack(Blocks.OAK_LOG, 1);
-        if (block == Blocks.SPRUCE_LOG) return new ItemStack(Blocks.SPRUCE_LOG, 1);
-        if (block == Blocks.BIRCH_LOG) return new ItemStack(Blocks.BIRCH_LOG, 1);
-        if (block == Blocks.JUNGLE_LOG) return new ItemStack(Blocks.JUNGLE_LOG, 1);
-        if (block == Blocks.ACACIA_LOG) return new ItemStack(Blocks.ACACIA_LOG, 1);
-        if (block == Blocks.DARK_OAK_LOG) return new ItemStack(Blocks.DARK_OAK_LOG, 1);
-        if (block == Blocks.MANGROVE_LOG) return new ItemStack(Blocks.MANGROVE_LOG, 1);
-        if (block == Blocks.CHERRY_LOG) return new ItemStack(Blocks.CHERRY_LOG, 1);
-        if (block == Blocks.OAK_LEAVES) return new ItemStack(Blocks.OAK_LEAVES, 1);
-        if (block == Blocks.SPRUCE_LEAVES) return new ItemStack(Blocks.SPRUCE_LEAVES, 1);
-        if (block == Blocks.BIRCH_LEAVES) return new ItemStack(Blocks.BIRCH_LEAVES, 1);
-        if (block == Blocks.JUNGLE_LEAVES) return new ItemStack(Blocks.JUNGLE_LEAVES, 1);
-        if (block == Blocks.ACACIA_LEAVES) return new ItemStack(Blocks.ACACIA_LEAVES, 1);
-        if (block == Blocks.DARK_OAK_LEAVES) return new ItemStack(Blocks.DARK_OAK_LEAVES, 1);
-        if (block == Blocks.MANGROVE_LEAVES) return new ItemStack(Blocks.MANGROVE_LEAVES, 1);
-        if (block == Blocks.CHERRY_LEAVES) return new ItemStack(Blocks.CHERRY_LEAVES, 1);
+        if (block == Blocks.WHEAT) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.WHEAT, 1);
+        if (block == Blocks.CARROTS) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.CARROTS, 2);
+        if (block == Blocks.POTATOES) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.POTATOES, 2);
+        if (block == Blocks.BEETROOTS) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BEETROOT, 1);
+        if (block == Blocks.BEETROOT) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BEETROOT, 1);
+        if (block == Blocks.SWEET_BERRIES) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.SWEET_BERRIES, 2);
+        if (block == Blocks.BAMBOO) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BAMBOO, 1);
+        if (block == Blocks.SUGAR_CANE) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.SUGAR_CANE, 1);
+        if (block == Blocks.CACTUS) return new net.minecraft.world.item.ItemStack(Blocks.CACTUS.asItem(), 1);
+        if (block == Blocks.COCOA_BLOCK) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.COCOA_BEANS, 2);
+        if (block == Blocks.MELON_STEM || block == Blocks.PUMPKIN_STEM) return net.minecraft.world.item.ItemStack.EMPTY;
+        if (block == Blocks.MELON) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.MELON_SLICE, 2);
+        if (block == Blocks.PUMPKIN) return new net.minecraft.world.item.ItemStack(Blocks.PUMPKIN.asItem(), 1);
+        if (block == Blocks.NETHER_WART) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.NETHER_WART, 2);
+        if (block == Blocks.DRIED_KELP_BLOCK) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.DRIED_KELP, 3);
+        if (block == Blocks.HAY_BLOCK) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.WHEAT, 3);
         // Default: return the block item
-        Item item = BlockItem.getItemFor(block);
-        if (item == null) return ItemStack.EMPTY;
-        return new ItemStack(item, 1);
+        return new net.minecraft.world.item.ItemStack(state.getBlock().asItem(), 1);
     }
 
 
