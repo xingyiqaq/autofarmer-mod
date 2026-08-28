@@ -31,9 +31,9 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.storage.loot.LootContextParam;
-import net.minecraft.world.level.storage.loot.LootContextParamSet;
-import net.minecraft.core.registries.Registries;
+
+
+
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
@@ -440,47 +440,62 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     // ══════════════════════════════════════════════════════════════════════════
 
     private ItemStack harvest(Level level, BlockPos pos, BlockState state) {
-        if (level.getServer() == null) return ItemStack.EMPTY;
-        ServerLevel serverLevel = (ServerLevel) level;
-        var lootRegistry = serverLevel.registryAccess().lookupOrThrow(Registries.LOOT_TABLE);
-        LootTable table = lootRegistry.get(state.getBlock().getLootTable());
-        if (table == null) return ItemStack.EMPTY;
-        LootContextParam<?>[] lootParams = {
-            LootContextParams.BLOCK_STATE,
-            LootContextParams.BLOCK_ENTITY,
-            LootContextParams.ORIGIN
-        };
-        LootContextParamSet paramSet = new LootContextParamSet() {
-            public boolean contains(LootContextParam<?> param) {
-                for (LootContextParam<?> p : lootParams) {
-                    if (p == param) return true;
-                }
-                return false;
-            }
-            public java.util.Iterator<LootContextParam<?>> iterator() {
-                return java.util.Arrays.asList(lootParams).iterator();
-            }
-        };
-        LootParams params = new LootParams.Builder(serverLevel)
-                .withParameter(LootContextParams.BLOCK_STATE, state)
-                .withParameter(LootContextParams.BLOCK_ENTITY, this)
-                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
-                .withLuck(0.0f)
-                .create(paramSet);
-        List<ItemStack> drops = table.getRandomItems(params);
-        if (drops.isEmpty()) return ItemStack.EMPTY;
-        ItemStack combined = drops.get(0).copy();
-        for (int i = 1; i < drops.size(); i++) {
-            ItemStack d = drops.get(i);
-            if (ItemStack.isSameItemSameTags(combined, d)) {
-                combined.grow(d.getCount());
-            } else {
-                combined = d;
-            }
-        }
+        // Simple harvest: return the block item directly
+        net.minecraft.world.item.Item item = net.minecraft.world.item.BlockItem.getItemFor(state.getBlock());
+        if (item == null) return net.minecraft.world.item.ItemStack.EMPTY;
+        // Handle crops specially
+        ItemStack result = getHarvestItem(state);
+        if (result.isEmpty()) return net.minecraft.world.item.ItemStack.EMPTY;
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-        return combined;
+        return result;
     }
+
+    private ItemStack getHarvestItem(BlockState state) {
+        Block block = state.getBlock();
+        if (block == Blocks.WHEAT) return new ItemStack(Items.WHEAT, 1);
+        if (block == Blocks.CARROTS) return new ItemStack(Items.CARROTS, 2);
+        if (block == Blocks.POTATOES) return new ItemStack(Items.POTATOES, 2);
+        if (block == Blocks.BEETROOTS) return new ItemStack(Items.BEETROOT, 1);
+        if (block == Blocks.BEETROOT) return new ItemStack(Items.BEETROOT, 1);
+        if (block == Blocks.SWEET_BERRIES) return new ItemStack(Items.SWEET_BERRIES, 2);
+        if (block == Blocks.BAMBOO) return new ItemStack(Items.BAMBOO, 1);
+        if (block == Blocks.SUGAR_CANE) return new ItemStack(Items.SUGAR_CANE, 1);
+        if (block == Blocks.CACTUS) return new ItemStack(Blocks.CACTUS, 1);
+        if (block == Blocks.COCOA_BLOCK) return new ItemStack(Items.COCOA_BEANS, 2);
+        if (block == Blocks.MELON_STEM || block == Blocks.PUMPKIN_STEM) return ItemStack.EMPTY; // stems handled elsewhere
+        if (block == Blocks.MELON) return new ItemStack(Items.MELON_SLICE, 2);
+        if (block == Blocks.PUMPKIN) return new ItemStack(Blocks.PUMPKIN, 1);
+        if (block == Blocks.NETHER_WART) return new ItemStack(Items.NETHER_WART, 2);
+        if (block == Blocks.CREEPER_HEAD) return new ItemStack(Items.CREEPER_HEAD, 1);
+        if (block == Blocks.SKELETON_SKULL) return new ItemStack(Items.SKELETON_SKULL, 1);
+        if (block == Blocks.ZOMBIE_HEAD) return new ItemStack(Items.ZOMBIE_HEAD, 1);
+        if (block == Blocks.PLAYER_HEAD) return new ItemStack(Items.PLAYER_HEAD, 1);
+        if (block == Blocks.WITHER_SKELETON_SKULL) return new ItemStack(Items.WITHER_SKELETON_SKULL, 1);
+        if (block == Blocks.DRIED_KELP_BLOCK) return new ItemStack(Items.DRIED_KELP, 3);
+        if (block == Blocks.HAY_BLOCK) return new ItemStack(Items.WHEAT, 3);
+        if (block == Blocks.TNT) return new ItemStack(Blocks.TNT, 1);
+        if (block == Blocks.OAK_LOG) return new ItemStack(Blocks.OAK_LOG, 1);
+        if (block == Blocks.SPRUCE_LOG) return new ItemStack(Blocks.SPRUCE_LOG, 1);
+        if (block == Blocks.BIRCH_LOG) return new ItemStack(Blocks.BIRCH_LOG, 1);
+        if (block == Blocks.JUNGLE_LOG) return new ItemStack(Blocks.JUNGLE_LOG, 1);
+        if (block == Blocks.ACACIA_LOG) return new ItemStack(Blocks.ACACIA_LOG, 1);
+        if (block == Blocks.DARK_OAK_LOG) return new ItemStack(Blocks.DARK_OAK_LOG, 1);
+        if (block == Blocks.MANGROVE_LOG) return new ItemStack(Blocks.MANGROVE_LOG, 1);
+        if (block == Blocks.CHERRY_LOG) return new ItemStack(Blocks.CHERRY_LOG, 1);
+        if (block == Blocks.OAK_LEAVES) return new ItemStack(Blocks.OAK_LEAVES, 1);
+        if (block == Blocks.SPRUCE_LEAVES) return new ItemStack(Blocks.SPRUCE_LEAVES, 1);
+        if (block == Blocks.BIRCH_LEAVES) return new ItemStack(Blocks.BIRCH_LEAVES, 1);
+        if (block == Blocks.JUNGLE_LEAVES) return new ItemStack(Blocks.JUNGLE_LEAVES, 1);
+        if (block == Blocks.ACACIA_LEAVES) return new ItemStack(Blocks.ACACIA_LEAVES, 1);
+        if (block == Blocks.DARK_OAK_LEAVES) return new ItemStack(Blocks.DARK_OAK_LEAVES, 1);
+        if (block == Blocks.MANGROVE_LEAVES) return new ItemStack(Blocks.MANGROVE_LEAVES, 1);
+        if (block == Blocks.CHERRY_LEAVES) return new ItemStack(Blocks.CHERRY_LEAVES, 1);
+        // Default: return the block item
+        Item item = BlockItem.getItemFor(block);
+        if (item == null) return ItemStack.EMPTY;
+        return new ItemStack(item, 1);
+    }
+
 
     // ══════════════════════════════════════════════════════════════════════════
     //  PLANT (dynamic — accepts any BlockItem via IPlantable / SaplingBlock)
