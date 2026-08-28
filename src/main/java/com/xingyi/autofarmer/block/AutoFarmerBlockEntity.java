@@ -453,15 +453,15 @@ public class AutoFarmerBlockEntity extends BlockEntity implements MenuProvider {
     private net.minecraft.world.item.ItemStack getHarvestItem(BlockState state) {
         Block block = state.getBlock();
         if (block == Blocks.WHEAT) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.WHEAT, 1);
-        if (block == Blocks.CARROTS) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.CARROTS, 2);
-        if (block == Blocks.POTATOES) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.POTATOES, 2);
+        if (block == Blocks.CARROTS) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.CARROT, 2);
+        if (block == Blocks.POTATOES) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.POTATO, 2);
         if (block == Blocks.BEETROOTS) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BEETROOT, 1);
-        if (block == Blocks.BEETROOT) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BEETROOT, 1);
-        if (block == Blocks.SWEET_BERRIES) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.SWEET_BERRIES, 2);
+        if (block == Blocks.BEETROOTS) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BEETROOT, 1);
+        if (block == Blocks.SWEET_BERRY_BUSH) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.SWEET_BERRIES, 2);
         if (block == Blocks.BAMBOO) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BAMBOO, 1);
         if (block == Blocks.SUGAR_CANE) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.SUGAR_CANE, 1);
         if (block == Blocks.CACTUS) return new net.minecraft.world.item.ItemStack(Blocks.CACTUS.asItem(), 1);
-        if (block == Blocks.COCOA_BLOCK) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.COCOA_BEANS, 2);
+        if (block == Blocks.COCOA) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.COCOA_BEANS, 2);
         if (block == Blocks.MELON_STEM || block == Blocks.PUMPKIN_STEM) return net.minecraft.world.item.ItemStack.EMPTY;
         if (block == Blocks.MELON) return new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.MELON_SLICE, 2);
         if (block == Blocks.PUMPKIN) return new net.minecraft.world.item.ItemStack(Blocks.PUMPKIN.asItem(), 1);
