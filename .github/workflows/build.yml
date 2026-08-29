@@ -9,30 +9,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         java-version: [17]
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Set up JDK ${{ matrix.java-version }}
         uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
           cache: gradle
-
-      - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: '8.5'
-
       - name: Build with Gradle
         run: gradle build --stacktrace
-
       - name: Upload built JAR
         uses: actions/upload-artifact@v4
         with:
