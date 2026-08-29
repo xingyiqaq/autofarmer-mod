@@ -17,10 +17,10 @@ public class AutoFarmerConfig {
                 .defineInRange("cooldownTicks", 40, 10, 200);
         treeSearchRadius = builder
                 .comment("Search radius around planted sapling to find grown tree (default: 2)")
-                .defineInRange("treeSearchRadius", 2, 1, 5);
+                .defineInRange("treeSearchRadius", 10, 1, 10);
         treeHarvestRadius = builder
                 .comment("Extra radius beyond connected logs to harvest leaves (default: 2)")
-                .defineInRange("treeHarvestRadius", 2, 1, 5);
+                .defineInRange("treeHarvestRadius", 10, 1, 10);
         builder.pop();
         spec = builder.build();
     }
