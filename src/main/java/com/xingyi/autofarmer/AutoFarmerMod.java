@@ -2,6 +2,7 @@ package com.xingyi.autofarmer;
 
 import com.xingyi.autofarmer.registry.ModBlockEntities;
 import com.xingyi.autofarmer.registry.ModBlocks;
+import com.xingyi.autofarmer.registry.ModItems;
 import com.xingyi.autofarmer.registry.ModMenus;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,6 +21,7 @@ public class AutoFarmerMod {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModBlocks.BLOCKS.register(modEventBus);
+        ModItems.ITEMS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModMenus.MENUS.register(modEventBus);
 
